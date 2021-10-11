@@ -9,8 +9,7 @@ import {
 
 import Home from './pages/Home'
 import Bargen from './pages/BarcodeGenerator'
-// import Barscan from './pages/BarcodeScanner'
-import Barscan from './pages/BarcodeScanner2'
+import Barscan from './pages/BarcodeScanner'
 import MonthEndBarscan from './pages/monthEndScanner'
 import Announcements from './pages/announcements';
 

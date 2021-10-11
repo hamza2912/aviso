@@ -24,6 +24,38 @@
   color: rgb(0, 0, 0);
 }
 
+.card-dim{
+  width: 210px;
+  height: 300px;
+}
+
+.barcodeDim{
+  width: 160px !important;
+  height: auto !important;
+  margin: 0 auto;
+}
+
+/* .card-fields{
+  padding: 0.278571em 1em !important;
+}
+
+.ui.form .field {
+  margin: 0 0 0.4em;
+} */
+
+.ui.form .field>label {
+  color: #3e5e9b !important;
+  font-weight: 400 !important;
+}
+
+.alert-box{
+  top: 20px !important;
+  left: 43% !important;
+  position: absolute !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 .App-link {
   color: #61dafb;
 }

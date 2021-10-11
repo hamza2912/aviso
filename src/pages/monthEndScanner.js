@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import firebase from "firebase";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 
 
@@ -21,6 +23,9 @@ function MonthEndScanner() {
     var presentStudents = [];
     var attendanceLog = [];
     var students = [];
+
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const fileExtension = '.xlsx';
 
     React.useEffect(() => {
       window.addEventListener('keydown', (event) => {
@@ -162,6 +167,7 @@ function MonthEndScanner() {
            sendSMS([x], false);
          });
          firebase.database().ref('presentStudents/').set([]);
+         exportToCSV();
         //  history.push("/");
        }
     }
@@ -214,6 +220,21 @@ function MonthEndScanner() {
         
     }
 
+    function exportToCSV() {
+
+      var newDate = new Date();
+      var date = newDate.getDate();
+      var month =  newDate.getMonth() + 1;
+      var year = newDate.getFullYear();
+
+          const ws = XLSX.utils.json_to_sheet(attendanceLog);
+          console.log(ws);
+          const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
+          const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+          const data = new Blob([excelBuffer], {type: fileType});
+          FileSaver.saveAs(data, `Attendance-${date}/${month}/${year}` + fileExtension);
+    }
+
     return (
 
       <div>
@@ -233,7 +254,7 @@ function MonthEndScanner() {
                 </div>
                 <p className='my-10'>Show your card to barcode scanner to mark your attendance.</p>
                 <img className='w-4/5 h-auto' src="icons/show_card.svg" alt="" />
-                <button onClick={sendSMS}>send sms</button>
+                {/* <button onClick={sendSMS}>send sms</button> */}
                 <div className='w-4/5 p-2 border border-black rounded-sm mt-8 h-12'>
                   <p id='last-barcode' className='text-center text-2xl'></p>
                 </div>

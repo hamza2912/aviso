@@ -13,13 +13,13 @@ function Home() {
             <Header />
 
             <div className='w-full h-screen flex items-center'>
-                <div className='w-4/5 mx-auto grid grid-cols-4 gap-8'>
+                <div className='w-3/5 mx-auto grid grid-cols-3 gap-8'>
                     <Link className='focus:outline-none' to="/barcode_generator">
                         <div className='flex flex-col items-center'>
                             <div className='w-full h-40'>
                                 <img className='w-32 h-auto mx-auto' src="icons/barcode_generator.svg" alt="" />
                             </div>
-                            <p>Barcode Generator</p>
+                            <p>Card Generator</p>
                         </div>
                     </Link>
                     <a className='focus:outline-none' href="/barcode_scanner">
@@ -27,17 +27,17 @@ function Home() {
                             <div className='w-full h-40'>
                                 <img className='w-48 h-auto mx-auto' src="icons/daily.svg" alt="" />
                             </div>
-                            <p>Daily Attendance</p>
+                            <p>Attendance Portal</p>
                         </div>
                     </a>
-                    <a className='focus:outline-none' href="/monthend_barcode_scanner">
+                    {/* <a className='focus:outline-none' href="/monthend_barcode_scanner">
                         <div className='flex flex-col items-center'>
                             <div className='w-full h-40'>
                                 <img className='w-48 h-auto mx-auto' src="icons/month.svg" alt="" />
                             </div>
                             <p>Month-end Attendance</p>
                         </div>
-                    </a>
+                    </a> */}
                     <Link className='focus:outline-none' to="/announcements">
                         <div className='flex flex-col items-center'>
                             <div className='w-full h-40'>

@@ -36,7 +36,7 @@ function Announcements() {
             var group = students.filter(x=> x.class == grade);
             var classes = [];
             group.map(x=>{
-                classes.push(x.barcode);
+                classes.push(x.phone_number);
             }) 
             console.log(classes);
 
