@@ -48,6 +48,11 @@
   font-weight: 400 !important;
 }
 
+.text-vs{
+  font-size: 7px;
+  color: #3e5e9b;
+}
+
 .alert-box{
   top: 20px !important;
   left: 43% !important;

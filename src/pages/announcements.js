@@ -4,6 +4,7 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 import {ArrowBack, GetApp} from '@material-ui/icons'
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import firebase from "firebase";
 
@@ -11,7 +12,10 @@ import firebase from "firebase";
 import { useBarcode } from '@createnextapp/react-barcode'
 
 function Announcements() {
-    const [grade, setGrade] = useState('11');
+
+    let history = useHistory();
+
+    const [grade, setGrade] = useState('IX');
     const [message, setMessage] = useState('');
     const [students, setStudents] = useState([]);
 
@@ -31,34 +35,38 @@ function Announcements() {
     };
 
     const submit = () => {
+        console.log(grade);
         if(message != '' &&  grade != ''){
 
-            var group = students.filter(x=> x.class == grade);
             var classes = [];
-            group.map(x=>{
-                classes.push(x.phone_number);
-            }) 
-            console.log(classes);
-
-            // var sender = "NS Coaching Center";
-            // var reciepent = stu[0].barcode;
-            // var url= "https://sendpk.com/api/sms.php?";
-            // axios.get(url, {
-            //     params: {
-            //     // api_key: "923362341421-5a895000-7398-4d64-bc3b-e3f98abb106a",
-            //     sender: sender,
-            //     mobile: classes,
-            //     message: message,
-            //     format: "json",
-            // }
-            // .then((res) => {
-            //     console.log(res.data);
-            //     if(reload){
-            //     // window.location.reload();
-            //     }
-            // });
-
-            console.log('submit');
+            if(grade !== "All"){
+                var group = students.filter(x=> x.class == grade);
+                group.map(x=>{
+                    classes.push(x.phone_number);
+                })
+            } else{
+                var group = students
+                group.map(x=>{
+                    classes.push(x.phone_number);
+                })
+            } 
+            // console.log(classes);
+            classes.map((student) => {
+                var sender = "NS Coaching Center";
+                var url= "https://sendpk.com/api/sms.php?";
+                axios.get(url, {
+                    params: {
+                        api_key: "923158455249-785b60a2-ada0-4733-9b3c-cc2674cd4361",
+                    sender: sender,
+                    mobile: student,
+                    message: message,
+                    format: "json", }
+                })
+                .then((res) => {
+                    console.log(res.data);
+                })
+            });
+            history.push("/");
         }else{
             document.querySelector('.error').style.display = 'block';
         }
@@ -86,8 +94,10 @@ function Announcements() {
                         <label>Announcement for</label>
 
                         <select onChange={handleChange} value={grade} className="ui fluid dropdown">
-                            <option className='item' value="11">First Year</option>
-                            <option className='item' value="12">Second Year</option>
+                            <option className='item' value="IX">9th Class</option>
+                            <option className='item' value="X">10th Class</option>
+                            <option className='item' value="XI">First Year</option>
+                            <option className='item' value="XII">Second Year</option>
                             <option className='item' value="All">All</option>
                         </select>                        
                     </div>
@@ -99,7 +109,7 @@ function Announcements() {
                         <div className="header">Action Forbidden</div>
                         <p>Please fill the required fields.</p>
                     </div>
-                    <div onClick={submit} class="ui submit button">Submit</div>
+                    <div onClick={submit} className="ui submit button">Submit</div>
                 </div>
             </div>
         </div>

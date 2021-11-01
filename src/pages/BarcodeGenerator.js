@@ -22,12 +22,13 @@ function BarcodeGenerator() {
         setName(event.target.value ? event.target.value : 'Name');
     }
     const handleFname = (event) => {
-        setFname(event.target.value ? event.target.value : 'Father Name');
+        setFname(event.target.value ? event.target.value : 'IX');
     }
     const { inputRef } = useBarcode({
         value: barcode,
         options: {
           background: '#ffffff',
+          displayValue: false,
         }
     });
     const downloadBarcode = () => {
@@ -75,7 +76,7 @@ function BarcodeGenerator() {
                     </div>
                     <div style={{marginTop:10, marginBottom:10}}>
                         <TextField onChange={handleFname} style={{width:180}}
-                        label="Student's Father Name" size="large" variant="outlined" color="secondary" 
+                        label="Student's Class" size="large" variant="outlined" color="secondary" 
                         />
                     </div>
                 </div>
@@ -91,7 +92,7 @@ function BarcodeGenerator() {
                                 <p className='font-semibold'>{name}</p>
                             </div>
                             <div class="field -mt-1">
-                                <label>Father Name:</label>
+                                <label>Class:</label>
                                 <p className='font-semibold'>{fname}</p>
                             </div>
                         </form>
@@ -101,6 +102,7 @@ function BarcodeGenerator() {
                                 : <p>No barcode preview</p>
                             }
                         </div>
+                        <p className='text-vs font-bold mt-4'>Address: Bright Career School Near Khumeini Hospital</p>
                     </div>
                     <div>
                         {   barcode ? 

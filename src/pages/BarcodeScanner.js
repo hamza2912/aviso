@@ -173,7 +173,7 @@ function BarcodeScanner() {
     function sendSMS(stu, reload){
 
         var sms_message;
-        var sender = "NS Collegiate";
+        var sender = "NSCollegiate";
         var reciepent = stu[0].phone_number;
         var url= "https://sendpk.com/api/sms.php?";
 
@@ -182,19 +182,12 @@ function BarcodeScanner() {
           console.log(sms_message);
           axios.get(url, {
             params: {
-              // api_key: "923362341421-5a895000-7398-4d64-bc3b-e3f98abb106a",
-              sender: "Hamza",
-              mobile: "923363924447",
-              message: "Hello I am Hamza",
+              api_key: "923158455249-785b60a2-ada0-4733-9b3c-cc2674cd4361",
+              sender: sender,
+              mobile: reciepent,
+              message: sms_message,
               format: "json",
             }
-            // params: {
-            //   api_key: "923362341421-5a895000-7398-4d64-bc3b-e3f98abb106a",
-            //   sender: sender,
-            //   mobile: reciepent,
-            //   message: sms_message,
-            //   format: "json",
-            // }
           })
           .then((res) => {
               
@@ -214,19 +207,12 @@ function BarcodeScanner() {
 
               axios.get(url, {
                 params: {
-                  // api_key: "923362341421-5a895000-7398-4d64-bc3b-e3f98abb106a",
-                  sender: "Hamza",
-                  mobile: "923363924447",
-                  message: "Hello I am Hamza",
+                  api_key: "923158455249-785b60a2-ada0-4733-9b3c-cc2674cd4361",
+                  sender: sender,
+                  mobile: reciepent,
+                  message: sms_message,
                   format: "json",
                 }
-                // params: {
-                //   api_key: "923362341421-5a895000-7398-4d64-bc3b-e3f98abb106a",
-                //   sender: sender,
-                //   mobile: reciepent,
-                //   message: sms_message,
-                //   format: "json",
-                // }
               })
               .then((res) => {
                   
@@ -320,6 +306,22 @@ function BarcodeScanner() {
     }
 
     function test(){
+      console.log("here");
+
+      // for (let i = 0; i < 50; i++) {
+        axios.get('https://sendpk.com/api/sms.php?', {
+        params: {
+          api_key: "923158455249-785b60a2-ada0-4733-9b3c-cc2674cd4361",
+          sender: "NS Collegiate",
+          mobile: "923052073889",
+          message: "Aziz is absent today",
+          format: "json",
+        }
+      })
+      .then((res) => {
+          console.log(res.data);
+        });
+      // }
     
     }
 
