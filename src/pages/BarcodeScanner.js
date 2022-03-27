@@ -19,12 +19,18 @@ function BarcodeScanner() {
     // var smsOneTime = true;
     var barcode = '';
     var presentStudents = [];
+    var [presentStudents2, setpresentStudents2] = React.useState([]);
     var attendanceLog = [];
+    var [attendanceLog2, setattendanceLog2] = React.useState([]);
     var students = [];
-    var dayCount;
+    var [students2, setstudents2] = React.useState([]);
+    var [dayCount, setdayCount] = React.useState(0);
+    // var dayCount;
     var lastdays = [28,29,30,31];
-    var lastday = false;
+    var [lastday, setlastday] = React.useState(false);
     let history = useHistory();
+    var [totalStudents, settotalStudents] = React.useState(0);
+    var [presentStudentsCount, setpresentStudentsCount] = React.useState(0);
     var newDate = new Date();
     var date = newDate.getDate();
     var month =  newDate.getMonth() + 1;
@@ -69,23 +75,34 @@ function BarcodeScanner() {
         
         firebase.database().ref('masterSheet/').on('value', (snapshot) => {
             students = snapshot.val();
+            setstudents2(snapshot.val());
+            if(students){
+              settotalStudents(students.length);
+            }
+            
         });
 
         firebase.database().ref('attendanceLog/').on('value', (snapshot) => {
             attendanceLog = snapshot.val();
+            setattendanceLog2(snapshot.val());
         });
 
         firebase.database().ref('presentStudents/').on('value', (snapshot) => {
             presentStudents = snapshot.val();
+            setpresentStudents2(snapshot.val());
+            if(presentStudents){
+              setpresentStudentsCount(presentStudents.length);
+            }
         });
 
         firebase.database().ref('monthCount/count/').on('value', function(snapshot) {
-            dayCount = snapshot.val();
+            // dayCount = snapshot.val();
+            setdayCount(snapshot.val());
         });
 
         if(lastdays.includes(newDate.getDate())){
           if(window.confirm("Is today the last working day of this month? Press Ok if yes.")){
-            lastday = true;
+            setlastday(true);
           } 
         }
 
@@ -178,7 +195,7 @@ function BarcodeScanner() {
         var url= "https://sendpk.com/api/sms.php?";
 
         if(!lastday){
-          sms_message = `${stu[0].name} is ${reload? "present":"absent"} today. ${date}/${month}/${year}`;
+          sms_message = `${stu[0].name} is ${reload? "present":"absent"} today. ${date}/${month}/${year}. For more details, please contact 03332280559`;
           console.log(sms_message);
           axios.get(url, {
             params: {
@@ -202,7 +219,7 @@ function BarcodeScanner() {
             if(stu_attendance.length>0){
               
               var month_count = stu_attendance[0].present;
-              sms_message = `${stu[0].name} was present ${month_count} days out of ${dayCount+1} days this month. ${date}/${month}/${year}`;
+              sms_message = `${stu[0].name} was present ${month_count} days out of ${dayCount+1} days this month. ${date}/${month}/${year}. For more details, please contact 03332280559`;
               console.log(sms_message);
 
               axios.get(url, {
@@ -235,31 +252,34 @@ function BarcodeScanner() {
     }
 
     function findNotPresent(student){
-      if(!presentStudents.includes(student.barcode.toString())){
+      var presentsss = presentStudents2.map(x => x.trim());
+      if(!presentsss.includes(student.barcode.toString())){
         return student;
       }
     }
 
     function stopAttendance(){
 
-      if(presentStudents){
-         // send sms to non present
-        var notPresent = students.filter(findNotPresent);
-        // console.log(notPresent);
-        notPresent.map((x) => {
-          sendSMS([x], false);
-        });
-        if(dayCount){
-          firebase.database().ref('monthCount/count').set(dayCount+1);
-        } else {
-          firebase.database().ref('monthCount/count').set(1);
+      if(presentStudents2){
+        if(presentStudents2.length > 0){
+          // send sms to non present
+          var notPresent = students2.filter(findNotPresent);
+          notPresent.map((x) => {
+            sendSMS([x], false);
+          });
+          if(dayCount){
+            firebase.database().ref('monthCount/count').set(dayCount+1);
+          } else {
+            firebase.database().ref('monthCount/count').set(1);
+          }
+          firebase.database().ref('presentStudents/').set([]);
+          if(lastday){
+            firebase.database().ref(`attendanceLogs/${month}_${year}/`).set(attendanceLog2);
+            exportToCSV();
+            // console.log("last day");
+          }
+          history.push("/");
         }
-        firebase.database().ref('presentStudents/').set([]);
-        if(lastday){
-          firebase.database().ref(`attendanceLogs/${month}_${year}/`).set(attendanceLog);
-          exportToCSV();
-        }
-        history.push("/");
       }
     }
 
@@ -296,7 +316,7 @@ function BarcodeScanner() {
 
     function exportToCSV() {
 
-      const ws = XLSX.utils.json_to_sheet(attendanceLog);
+      const ws = XLSX.utils.json_to_sheet(attendanceLog2);
       const wb = { Sheets: { 'data': ws }, SheetNames: ['data'] };
       const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
       const data = new Blob([excelBuffer], {type: fileType});
@@ -347,6 +367,11 @@ function BarcodeScanner() {
         <audio src="audio/present.mp3" id="present" className="hidden" preload="none"></audio>
         <audio src="audio/wrong.mp3" id="wrong" className="hidden" preload="none"></audio>
 
+        <div className='absolute record'>
+          <p className='text-lg text-black font-semibold'>Present Students: {presentStudentsCount}</p>
+          <p className='text-lg text-black font-semibold -mt-2'>Total Students: {totalStudents}</p>
+        </div>
+
         <div className='w-full h-screen flex items-center'>
 
             <div className='w-1/3 mx-auto flex flex-col items-center'>
@@ -360,7 +385,7 @@ function BarcodeScanner() {
                 </div>
                 <p className='my-10'>Show your card to barcode scanner to mark your attendance.</p>
                 <img className='w-4/5 h-auto' src="icons/show_card.svg" alt="" />
-                <button onClick={sendSMS}>send sms</button>
+                {/* <button onClick={sendSMS}>send sms</button> */}
                 <div className='w-4/5 p-2 border border-black rounded-sm mt-8 h-12'>
                   <p id='last-barcode' className='text-center text-2xl'></p>
                 </div>

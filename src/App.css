@@ -25,12 +25,12 @@
 }
 
 .card-dim{
-  width: 210px;
-  height: 300px;
+  width: 262px;
+  height: 375px;
 }
 
 .barcodeDim{
-  width: 160px !important;
+  width: 180px !important;
   height: auto !important;
   margin: 0 auto;
 }
@@ -49,8 +49,13 @@
 }
 
 .text-vs{
-  font-size: 7px;
+  font-size: 9px;
   color: #3e5e9b;
+}
+
+.record{
+  top: 80px !important;
+  right: 5% !important;
 }
 
 .alert-box{

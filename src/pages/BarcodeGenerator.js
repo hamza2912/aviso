@@ -10,7 +10,7 @@ import html2canvas from 'html2canvas';
 function BarcodeGenerator() {
     const [barcode, setBarcode] = useState('92');
     const [name, setName] = useState('Name');
-    const [fname, setFname] = useState('Father Name');
+    const [fname, setFname] = useState('IX');
     const handleChange = (event) => {
         if(event.target.value.length < 3){
             setBarcode("92");
@@ -86,23 +86,23 @@ function BarcodeGenerator() {
                             <h2 className='text-2xl mb-0'>NS Collegiate</h2>
                             <img className='w-10 h-auto' src="NS.png" alt="" />
                         </div>
-                        <form class="ui form  w-full mt-3">
+                        <form class="ui form  w-full mt-6">
                             <div class="field">
                                 <label>Name:</label>
-                                <p className='font-semibold'>{name}</p>
+                                <p className='font-semibold text-xl'>{name}</p>
                             </div>
                             <div class="field -mt-1">
                                 <label>Class:</label>
-                                <p className='font-semibold'>{fname}</p>
+                                <p className='font-semibold text-xl'>{fname}</p>
                             </div>
                         </form>
-                        <div className='flex w-full justify-center mt-5'> 
+                        <div className='flex w-full justify-center mt-10'> 
                             {   barcode !== '' ?
                                 <canvas className='barcodeDim' ref={inputRef} />
                                 : <p>No barcode preview</p>
                             }
                         </div>
-                        <p className='text-vs font-bold mt-4'>Address: Bright Career School Near Khumeini Hospital</p>
+                        <p className='text-vs font-bold mt-5'>Address: Bright Career School Near Khumeini Hospital</p>
                     </div>
                     <div>
                         {   barcode ? 
