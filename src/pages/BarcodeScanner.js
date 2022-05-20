@@ -75,6 +75,7 @@ function BarcodeScanner() {
         
         firebase.database().ref('masterSheet/').on('value', (snapshot) => {
             students = snapshot.val();
+            students = Object.values(students)
             setstudents2(snapshot.val());
             if(students){
               settotalStudents(students.length);
